@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.util.Set;
+
 @Entity
 @Table(name = "vehicule")
 @Getter
@@ -21,4 +23,12 @@ public class Vehicule {
     private CategorieVehicule categorie;
     private BigDecimal tarifJournalier;
     private StatutVehicule statut;
+    @OneToMany(cascade= CascadeType.ALL, mappedBy="vehicule")
+    private Set<Maintenance> Maintenances;
+    @OneToMany(cascade= CascadeType.ALL, mappedBy="vehicule")
+    private Set<Reservation> Reservations;
+    @ManyToMany(mappedBy="vehicules", cascade = CascadeType.ALL)
+    private Set<Equipement> Equipements;
+    @ManyToOne
+    Agence agence;
 }

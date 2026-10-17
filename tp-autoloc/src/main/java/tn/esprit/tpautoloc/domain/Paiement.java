@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+
 @Entity
 @Table(name = "paiement")
 @Getter
@@ -24,6 +25,8 @@ public class Paiement {
     private BigDecimal montant;
 
     private LocalDate datePaiement;
+    @ManyToOne
+    Contrat contrat;
 
     @Enumerated(EnumType.STRING)
     private ModePaiement modePaiement;

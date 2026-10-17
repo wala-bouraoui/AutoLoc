@@ -23,6 +23,12 @@ public class Reservation {
     private LocalDate dateDebut;
 
     private LocalDate dateFin;
+    @ManyToOne
+    Vehicule vehicule;
+    @ManyToOne
+    Client client;
+    @OneToOne
+    private Contrat contrat;
 
     @Enumerated(EnumType.STRING)
     private StatutReservation statut;

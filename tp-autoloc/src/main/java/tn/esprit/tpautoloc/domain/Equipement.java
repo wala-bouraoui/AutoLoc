@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "equipement")
 @Getter
@@ -19,4 +21,7 @@ public class Equipement {
     private Long idEquipement;
 
     private String libelle;
+    @ManyToMany(cascade= CascadeType.ALL)
+    private Set<Vehicule> vehicules;
+
 }
