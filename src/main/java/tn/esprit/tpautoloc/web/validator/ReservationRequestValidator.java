@@ -1,0 +1,44 @@
+package tn.esprit.tpautoloc.web.validator;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+import tn.esprit.tpautoloc.web.dto.ReservationRequestDTO;
+
+/**
+ * Règles inter-champs d'une réservation :
+ * - la date de début est aujourd'hui ou dans le futur ;
+ * - la date de fin est strictement postérieure à la date de début.
+ */
+@Component
+public class ReservationRequestValidator implements Validator {
+
+    @Override
+    public boolean supports(Class<?> classe) {
+        return ReservationRequestDTO.class.equals(classe);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        ReservationRequestDTO dto = (ReservationRequestDTO) target;
+
+        if (dto.getDateDebut() == null || dto.getDateFin() == null) {
+            return; // Les champs obligatoires sont traités par Bean Validation.
+        }
+
+        // On évite d'empiler un second message si Bean Validation a déjà rejeté le champ.
+        if (!errors.hasFieldErrors("dateDebut") && dto.getDateDebut().isBefore(LocalDate.now(ZoneId.systemDefault()))) {
+            errors.rejectValue("dateDebut",
+                    "reservation.dateDebut.passee",
+                    "La date de début doit être aujourd'hui ou dans le futur");
+        }
+
+        if (!errors.hasFieldErrors("dateFin") && !dto.getDateFin().isAfter(dto.getDateDebut())) {
+            errors.rejectValue("dateFin",
+                    "reservation.dates.invalides",
+                    "La date de fin doit être postérieure à la date de début");
+        }
+    }
+}
